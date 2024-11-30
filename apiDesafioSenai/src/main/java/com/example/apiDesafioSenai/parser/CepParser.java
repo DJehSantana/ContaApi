@@ -21,6 +21,6 @@ public class CepParser {
     }
 
     public CepDTO EntityToDTO(Cep entity) {
-        return new CepDTO(entity.getIdCep(), entity.getCep(), entity.getRua(), entity.getCidade(), entity.getEstado());
+        return new CepDTO(entity);
     }
 }

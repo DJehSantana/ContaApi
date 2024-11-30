@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContaParser {
     public ContaDTO EntityToDTO(Conta entity) {
-        return new ContaDTO(entity.getIdConta(), entity.getCpf(), entity.getConta());
+        return new ContaDTO(entity);
     }
 }

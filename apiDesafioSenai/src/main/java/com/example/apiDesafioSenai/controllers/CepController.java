@@ -3,7 +3,6 @@ package com.example.apiDesafioSenai.controllers;
 import com.example.apiDesafioSenai.parser.CepParser;
 import com.example.apiDesafioSenai.dto.CepDTO;
 import com.example.apiDesafioSenai.dto.RequestResponseCepDTO;
-import com.example.apiDesafioSenai.exception.RegistroDuplicadoException;
 import com.example.apiDesafioSenai.repository.CepRepository;
 import com.example.apiDesafioSenai.services.CepService;
 import jakarta.validation.Valid;

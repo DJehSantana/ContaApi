@@ -1,16 +1,19 @@
 package com.example.apiDesafioSenai.services;
 
+import com.example.apiDesafioSenai.exception.CampoObrigatorioException;
 import com.example.apiDesafioSenai.parser.CepParser;
 import com.example.apiDesafioSenai.dto.CepDTO;
 import com.example.apiDesafioSenai.dto.RequestResponseCepDTO;
 import com.example.apiDesafioSenai.exception.RegistroDuplicadoException;
 import com.example.apiDesafioSenai.model.Cep;
 import com.example.apiDesafioSenai.repository.CepRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+@Slf4j
 @Service
 public class CepService {
 
@@ -20,14 +23,18 @@ public class CepService {
     @Autowired
     private CepRepository cepRepository;
 
-    public CepDTO cadastrarCep(RequestResponseCepDTO cepDTO) {
+    public CepDTO cadastrarCep(RequestResponseCepDTO reqCepDTO) {
 
-        if(cepRepository.existsByCep(cepDTO.cep())) {
-            throw new RegistroDuplicadoException("CEP", cepDTO.cep());
+        if(cepRepository.existsByCep(reqCepDTO.cep())) {
+            throw new RegistroDuplicadoException("CEP", reqCepDTO.cep());
         }
+        CepDTO respCepDTO;
 
-        Cep novoCep = parser.requestCepDTOToEntity(cepDTO);
-        return parser.EntityToDTO(cepRepository.save(novoCep));
+        Cep novoCep = parser.requestCepDTOToEntity(reqCepDTO);
+        String msg = "Cep " + novoCep.getCep() + " cadastrado com sucesso";
+        respCepDTO = new CepDTO(cepRepository.save(novoCep), msg);
+
+        return respCepDTO;
     }
 
     public RequestResponseCepDTO buscarPorCampoCep(Integer cep) {
