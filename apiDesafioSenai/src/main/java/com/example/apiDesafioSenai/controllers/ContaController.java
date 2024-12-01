@@ -19,14 +19,15 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/")
 public class ContaController {
+    private final ContaService service;
+
+    private final ContaRepository repository;
 
     @Autowired
-    ContaService service;
-
-    @Autowired
-    ContaRepository repository;
-    @Autowired
-    private ContaService contaService;
+    ContaController(ContaService contaService, ContaRepository contaRepository) {
+        this.service = contaService;
+        this.repository = contaRepository;
+    }
 
     @GetMapping("contas")
     public ResponseEntity<List<ContaDTO>> getAll() {
@@ -43,7 +44,7 @@ public class ContaController {
 
     @GetMapping("contas/{conta}/extrato")
     public ResponseEntity<MovimentacoesContaDTO> getExtratoConta(@PathVariable("conta") String conta) {
-        MovimentacoesContaDTO movimentacoes = contaService.carregarMovimentacoesConta(conta);
+        MovimentacoesContaDTO movimentacoes = service.carregarMovimentacoesConta(conta);
         return ResponseEntity.ok(movimentacoes);
     }
 
@@ -57,7 +58,7 @@ public class ContaController {
 
     @DeleteMapping("conta/{conta}")
     public ResponseEntity<ResponseContaDTO> deleteConta(@PathVariable("conta") String conta) {
-        ResponseContaDTO response = contaService.apagarContaPorNumeroConta(conta);
+        ResponseContaDTO response = service.apagarContaPorNumeroConta(conta);
         return ResponseEntity.ok(response);
     }
 

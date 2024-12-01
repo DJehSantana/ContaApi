@@ -1,6 +1,7 @@
 package com.example.apiDesafioSenai.dto;
 
 import com.example.apiDesafioSenai.model.Conta;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.*;
 
 public record RequestContaDTO(

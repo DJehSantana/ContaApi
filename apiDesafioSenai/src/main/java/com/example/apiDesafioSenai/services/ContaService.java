@@ -23,31 +23,35 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class ContaService {
+    private final ContaRepository contaRepository;
+    private final MovimentacaoRepository movimentacaoRepository;
+    private final MovimentacaoService movimentacaoService;
+
 
     @Autowired
-    ContaRepository contaRepository;
-
-    @Autowired
-    MovimentacaoRepository movimentacaoRepository;
-
-    @Autowired
-    ContaParser contaParser;
-
-    @Autowired
-    MovimentacaoService movimentacaoService;
+    ContaService(ContaRepository contaRepository, MovimentacaoService movimentacaoService, MovimentacaoRepository movimentacaoRepository) {
+        this.movimentacaoService = movimentacaoService;
+        this.contaRepository = contaRepository;
+        this.movimentacaoRepository = movimentacaoRepository;
+    }
 
     public ResponseContaDTO cadastrarConta(RequestContaDTO contaDTO) {
+        String msg = "Conta de número: " + contaDTO.conta() + " cadastrada com sucesso!";
 
+        //Caso ja exista uma conta cadastrada com o numero, verifica se é uma atualizacao do cpf e atualiza o registro
         if(contaRepository.existsByConta(contaDTO.conta())) {
-            throw new RegistroDuplicadoException("Número conta", contaDTO.conta());
+            Conta contaBD = contaRepository.findFirstByConta(contaDTO.conta()).orElse(null);
+            if(Objects.requireNonNull(contaBD).getCpf().equals(contaDTO.cpf())) {
+                throw new RegistroDuplicadoException("Número conta", contaDTO.conta());
+            }
+            contaBD.setCpf(contaDTO.cpf());
+            return new ResponseContaDTO(contaRepository.save(contaBD), msg);
         }
 
         Conta novaConta = new Conta();
         novaConta.setConta(contaDTO.conta());
         novaConta.setCpf(contaDTO.cpf());
         novaConta.setDataCriacao(LocalDateTime.now());
-
-        String msg = "Conta de número: " + contaDTO.conta() + " cadastrada com sucesso!";
 
         return new ResponseContaDTO(contaRepository.save(novaConta), msg);
     }
