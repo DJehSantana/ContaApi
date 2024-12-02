@@ -17,11 +17,15 @@ import java.util.Objects;
 @Service
 public class CepService {
 
-    @Autowired
-    CepParser parser;
+    private final CepParser parser;
+
+    private final CepRepository cepRepository;
 
     @Autowired
-    private CepRepository cepRepository;
+    CepService( CepRepository cepRepository, CepParser parser) {
+        this.cepRepository = cepRepository;
+        this.parser = parser;
+    }
 
     public CepDTO cadastrarCep(RequestResponseCepDTO reqCepDTO) {
 

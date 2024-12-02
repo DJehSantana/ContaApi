@@ -21,10 +21,15 @@ import java.util.stream.Collectors;
 @Service
 public class MovimentacaoService {
 
+    private final MovimentacaoRepository movimentacaoRepository;
+
+    private final ContaRepository contaRepository;
+
     @Autowired
-    MovimentacaoRepository movimentacaoRepository;
-    @Autowired
-    private ContaRepository contaRepository;
+    MovimentacaoService(MovimentacaoRepository movimentacaoRepository, ContaRepository contaRepository) {
+        this.movimentacaoRepository = movimentacaoRepository;
+        this.contaRepository = contaRepository;
+    }
 
     public MovimentacoesContaDTO buscarMovimentacoesPorConta(Conta conta) {
         MovimentacoesContaDTO movimentacoesContaDTO = new MovimentacoesContaDTO();

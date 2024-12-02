@@ -1,6 +1,5 @@
 package com.example.apiDesafioSenai.controllers;
 
-import com.example.apiDesafioSenai.parser.CepParser;
 import com.example.apiDesafioSenai.dto.CepDTO;
 import com.example.apiDesafioSenai.dto.RequestResponseCepDTO;
 import com.example.apiDesafioSenai.repository.CepRepository;
@@ -17,14 +16,16 @@ import java.util.stream.Collectors;
 @RequestMapping("cep")
 public class CepController {
 
-    @Autowired
-    private CepRepository repository;
+    private final CepRepository repository;
+
+    private final CepService service;
+
 
     @Autowired
-    private CepService service;
-
-    @Autowired
-    private CepParser cepParser;
+    CepController(CepRepository repository, CepService service) {
+        this.service = service;
+        this.repository = repository;
+    }
 
     @GetMapping
     public ResponseEntity<List<CepDTO>> getAll() {
